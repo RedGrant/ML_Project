@@ -10,7 +10,9 @@
 import numpy as np
 import pandas as pd
 import matplotlib as plt
-# import plotly.express as px
+import sklearn
+import seaborn as sb
+import plotly.express as px
 import pathlib
 
 
@@ -26,22 +28,27 @@ def dataset_loader():
     # TODO - REMOVE THIS DEBUGGER LINE
     #debbuger actual_dir:
     #actual_dir = '/home/pedroguedes/PycharmProjects/ML_Project/src'
+    actual_dir = '/home/pguedes/PycharmProjects/ML_Project/src'
     path = str(actual_dir) + '/data/winequality-red.csv'
 
     # load the entire dataset and labels for each attribute through pandas csv reader method
     raw_dataset = pd.read_csv(path)
-
+    raw_dataset.head()
     # check if the dataset contains missing values
     raw_dataset = check_for_missing_values(raw_dataset)
 
-    # load a figure to the local host ip with the second argument being the attribute/output to be read
-    # fig = px.histogram(raw_dataset, x='quality')
-    # fig.show()
+
 
     # maximum wine quality found in the dataset
     print("The minimum wine quality found in the dataset:", (min(raw_dataset.quality)))
     # maximum wine quality found in the dataset
     print("The maximum wine quality found in the dataset:", (max(raw_dataset.quality)))
+
+    sb.pairplot(raw_dataset)
+
+    # load a figure to the local host ip with the second argument being the attribute/output to be read
+    fig = px.histogram(raw_dataset, x='quality')
+    fig.show()
 
     # TODO - This might change in the meantime
     dataset = raw_dataset
@@ -90,4 +97,3 @@ def check_for_missing_values(raw_dataset):
         print("The dataset does not contain missing values in any attribute")
 
     return raw_dataset
-dataset_loader()
