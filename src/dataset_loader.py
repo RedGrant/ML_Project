@@ -14,7 +14,7 @@ import sklearn
 import seaborn as sb
 import plotly.express as px
 import pathlib
-
+from os import path
 
 def dataset_loader():
     '''
@@ -28,7 +28,7 @@ def dataset_loader():
     # TODO - REMOVE THIS DEBUGGER LINE
     #debbuger actual_dir:
     #actual_dir = '/home/pedroguedes/PycharmProjects/ML_Project/src'
-    actual_dir = '/home/pguedes/PycharmProjects/ML_Project/src'
+    #actual_dir = '/home/pguedes/PycharmProjects/ML_Project/src'
     path = str(actual_dir) + '/data/winequality-red.csv'
 
     # load the entire dataset and labels for each attribute through pandas csv reader method
@@ -37,18 +37,21 @@ def dataset_loader():
     # check if the dataset contains missing values
     raw_dataset = check_for_missing_values(raw_dataset)
 
-
-
     # maximum wine quality found in the dataset
     print("The minimum wine quality found in the dataset:", (min(raw_dataset.quality)))
     # maximum wine quality found in the dataset
     print("The maximum wine quality found in the dataset:", (max(raw_dataset.quality)))
 
-    sb.pairplot(raw_dataset)
+    # if the figure is not saved yet, it will be generated
+    if not path.exists('pairplot_figure_wine_dataset.png'):
+        # pair plotting the data
+        pairplot_figure = sb.pairplot(raw_dataset)
+        pairplot_figure = pairplot_figure.fig
+        pairplot_figure.savefig("pairplot_figure_wine_dataset.png")
 
-    # load a figure to the local host ip with the second argument being the attribute/output to be read
-    fig = px.histogram(raw_dataset, x='quality')
-    fig.show()
+
+
+
 
     # TODO - This might change in the meantime
     dataset = raw_dataset
@@ -97,3 +100,5 @@ def check_for_missing_values(raw_dataset):
         print("The dataset does not contain missing values in any attribute")
 
     return raw_dataset
+
+dataset_loader()
