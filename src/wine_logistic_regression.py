@@ -3,6 +3,9 @@ from sklearn.metrics import confusion_matrix, accuracy_score
 import numpy as np
 import pickle
 import pathlib
+import seaborn as sns
+import pathlib
+import os
 
 
 def wine_log_regression(X_train, Y_train, X_val, Y_val):
@@ -47,14 +50,11 @@ def wine_log_regression(X_train, Y_train, X_val, Y_val):
                 # predict the values with the validation set
                 model_predictions.append(model[model_index].predict(X_val))
                 # compute the current model's accuracy, normalized
-                model_accuracy.append(accuracy_score(Y_val, model_predictions[model_index], normalize= True))
+                model_accuracy.append(accuracy_score(Y_val, model_predictions[model_index], normalize=True))
                 model_index += 1
 
     # find which model had the best accuracy
     best_accuracy = np.argmax(model_accuracy)
-
-    log_reg_conf_matrix = confusion_matrix(Y_val, model_predictions[best_accuracy])
-    print(log_reg_conf_matrix)
     # print the parameters
     optimized_parameters = model[best_accuracy].get_params(deep=True)
     print('Overall optimal parameters: ', optimized_parameters)
@@ -63,8 +63,8 @@ def wine_log_regression(X_train, Y_train, X_val, Y_val):
     model_training_prediction = model[best_accuracy].predict(X_train)
     model_validation_prediction = model[best_accuracy].predict(X_val)
 
-    model_training_accuracy = accuracy_score(Y_train, model_training_prediction, normalize= True)
-    model_validation_accuracy = accuracy_score(Y_val, model_validation_prediction, normalize= True)
+    model_training_accuracy = accuracy_score(Y_train, model_training_prediction, normalize=True)
+    model_validation_accuracy = accuracy_score(Y_val, model_validation_prediction, normalize=True)
 
     # helps the user to visualize the results through the console
     print('Logistic Regression Score')
@@ -76,5 +76,26 @@ def wine_log_regression(X_train, Y_train, X_val, Y_val):
     pickle.dump(model[best_accuracy], open(path, 'wb'))
 
     # TODO - Expose the results graphically
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    log_reg_conf_matrix = confusion_matrix(Y_val, model_predictions[best_accuracy])
+    print(log_reg_conf_matrix)
+
+    actual_dir = pathlib.Path().absolute()
+    path = str(actual_dir) + '/figures/logreg_cmatrix_val.png'
+
+    # Generate a Model Validation Confusion Matrix
+    # if the figure is not saved yet, it will be generated
+    if not os.path.exists(path):
+        confusion_matrix_plot = plt.subplot()
+        sns.heatmap(log_reg_conf_matrix, annot=True, fmt='g', ax=confusion_matrix_plot)
+        # labels, title and ticks
+        confusion_matrix_plot.set_xlabel('Predicted labels')
+        confusion_matrix_plot.set_ylabel('True labels')
+        confusion_matrix_plot.set_title('Logistic Regression Confusion Matrix - Validation Set')
+        confusion_matrix_plot.xaxis.set_ticklabels(['Awful', 'Average', 'Excellent'])
+        confusion_matrix_plot.yaxis.set_ticklabels(['Awful', 'Average', 'Excellent'])
+        confusion_matrix_plot.figure.savefig(path)
 
     return model[best_accuracy]
