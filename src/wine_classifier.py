@@ -1,21 +1,24 @@
-# Idilson
-# Pedro Guedes
-# Rafael Cabral
+# Pedro Guedes - up202101510@up.pt
+# Rafael Cabral - up201609762@edu.fe.up.pt
+# Idilson Nhamage - up202011161@edu.fe.up.pt
 # FEUP | PDEEC | Machine Learning 2021/2022
 
 # *********************************** ---------------------------------- *********************************** #
 
 # Libraries' import
-
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
-from dataset_loader import dataset_loader
 from wine_logistic_regression import wine_log_regression
 import pathlib
 import os
 import pickle
+
+# created functions
+from dataset_loader import dataset_loader
+from wine_svc import wine_svc
+
 
 # load the dataset without any missing data and divided in training, validation and test sets
 dataset = dataset_loader()
@@ -45,4 +48,12 @@ if not os.path.exists(path):
     log_reg_model = wine_log_regression(X_train, Y_train, X_val, Y_val)
 else:
     log_reg_model = pickle.load(open(path, 'rb'))
+
+path = str(actual_dir) + '/models/svc_model_py3_8.sav'
+
+# modeling the Logistic Regression Model. If one is already trained and optimized, it is going to be loaded instead
+if not os.path.exists(path):
+    svc_model = wine_svc(X_train, Y_train, X_val, Y_val)
+else:
+    svc_model = pickle.load(open(path, 'rb'))
 

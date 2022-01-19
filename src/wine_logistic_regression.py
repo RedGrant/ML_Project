@@ -1,9 +1,15 @@
+# Pedro Guedes - up202101510@up.pt
+# Rafael Cabral - up201609762@edu.fe.up.pt
+# Idilson Nhamage - up202011161@edu.fe.up.pt
+# FEUP | PDEEC | Machine Learning 2021/2022
+
+# *********************************** ---------------------------------- *********************************** #
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, accuracy_score
 import numpy as np
 import pickle
-import pathlib
 import seaborn as sns
+import matplotlib.pyplot as plt
 import pathlib
 import os
 
@@ -74,10 +80,6 @@ def wine_log_regression(X_train, Y_train, X_val, Y_val):
     actual_dir = pathlib.Path().absolute()
     path = str(actual_dir) + '/models/log_reg_model_py3_8.sav'
     pickle.dump(model[best_accuracy], open(path, 'wb'))
-
-    # TODO - Expose the results graphically
-    import seaborn as sns
-    import matplotlib.pyplot as plt
 
     log_reg_conf_matrix = confusion_matrix(Y_val, model_predictions[best_accuracy])
     print(log_reg_conf_matrix)

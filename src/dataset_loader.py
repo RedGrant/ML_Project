@@ -1,6 +1,6 @@
-# Idilson
-# Pedro Guedes
-# Rafael Cabral
+# Pedro Guedes - up202101510@up.pt
+# Rafael Cabral - up201609762@edu.fe.up.pt
+# Idilson Nhamage - up202011161@edu.fe.up.pt
 # FEUP | PDEEC | Machine Learning 2021/2022
 
 # *********************************** ---------------------------------- *********************************** #
@@ -136,7 +136,7 @@ def dataset_splitter(raw_dataset):
     # if the figure is not saved yet, it will be generated
     if not os.path.exists(path):
         # pair plotting the data
-        histogram_figure = sb.histplot(raw_dataset['classification'], stat="percent", discrete=True)
+        histogram_figure = sb.countplot(x='classification', data=raw_dataset)
         histogram_figure = histogram_figure.get_figure()
         histogram_figure.savefig(path)
         plt.close(histogram_figure)
