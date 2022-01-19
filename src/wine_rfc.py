@@ -32,7 +32,7 @@ def wine_rfc(X_train, Y_train, X_val, Y_val):
 
 
     # number of trees in the forest
-    n_estimators_array = np.arange(10, 2000, 10)
+    n_estimators_array = np.arange(10, 300, 10)
 
     # Number of features to consider at every split
     max_features_array = ['auto', 'sqrt', 'log2']

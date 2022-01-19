@@ -66,5 +66,3 @@ if not os.path.exists(path):
 else:
     rfc_model = pickle.load(open(path, 'rb'))
 
-
-
