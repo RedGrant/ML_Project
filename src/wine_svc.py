@@ -83,7 +83,7 @@ def wine_svc(X_train, Y_train, X_val, Y_val, class_type):
     print('Validation Accuracy Score is: ', model_validation_accuracy)
 
     actual_dir = pathlib.Path().absolute()
-    path = str(actual_dir) + '/models/' + class_type + '_vc_model_py3_8.sav'
+    path = str(actual_dir) + '/models/' + class_type + '_svc_model_py3_8.sav'
     pickle.dump(model[best_accuracy], open(path, 'wb'))
 
     svc_conf_matrix = confusion_matrix(Y_val, model_predictions[best_accuracy])
