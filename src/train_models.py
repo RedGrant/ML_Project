@@ -5,11 +5,14 @@
 
 # *********************************** ---------------------------------- *********************************** #
 
+# importing created functions
 from wine_logistic_regression import wine_log_regression
 from wine_svc import wine_svc
 from wine_rfc import wine_rfc
-from sklearn.preprocessing import StandardScaler
+from wine_stochastic import wine_stochastic
 
+# importing libraries
+from sklearn.preprocessing import StandardScaler
 import pathlib
 import os
 import pickle
@@ -68,5 +71,13 @@ def train_models(dataset, class_type):
     else:
         rfc_model = pickle.load(open(path, 'rb'))
 
-    optimized_models = [log_reg_model, svc_model, rfc_model]
+    path = str(actual_dir) + '/models/' + class_type + '_sgd_model_py3_8.sav'
+    # modeling the Stochastic Gradient Descent Model. If one is already trained and optimized,
+    # it is going to be loaded instead
+    if not os.path.exists(path):
+        sgd_model = wine_stochastic(X_train, Y_train, X_val, Y_val, class_type)
+    else:
+        sgd_model = pickle.load(open(path, 'rb'))
+
+    optimized_models = [log_reg_model, svc_model, rfc_model, sgd_model]
     return optimized_models

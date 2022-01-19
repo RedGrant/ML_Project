@@ -25,7 +25,7 @@ def wine_rfc(X_train, Y_train, X_val, Y_val, class_type):
     :param Y_train: output training set
     :param X_val: attributes validation set
     :param Y_val: output validation set
-    :return: returns the most optimal logistic regression model
+    :return: returns the most optimal RFC model
     """
 
     # number of trees in the forest
