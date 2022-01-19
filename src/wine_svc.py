@@ -15,7 +15,7 @@ import pathlib
 import os
 
 
-def wine_svc(X_train, Y_train, X_val, Y_val):
+def wine_svc(X_train, Y_train, X_val, Y_val, class_type):
     """
     SVC classifier optimal model generator.
     :param X_train: attributes training set

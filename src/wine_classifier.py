@@ -8,24 +8,26 @@
 # Libraries' import
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
+
 from sklearn.metrics import accuracy_score, classification_report
-import pathlib
-import os
-import pickle
 
 # created functions
 from dataset_loader import dataset_loader
-from wine_logistic_regression import wine_log_regression
-from wine_svc import wine_svc
-from wine_rfc import wine_rfc
+from train_models import train_models
 
-# TODO - Study the dataset with good bad (two classes); 3 classes - awful, average, excellent; 5 classes - 5 stars and
-#  generate outputs out for all types
-
-classifier_type = ['binary', 'multiclass_3', 'multiclass_5']
+class_type = ['binary', 'multiclass_3', 'multiclass_5']
 # load the dataset without any missing data and divided in training, validation and test sets
-dataset_binary, dataset_multiclass_3, dataset_multiclass_5 = dataset_loader(classifier_type)
+dataset_binary, dataset_multiclass_3, dataset_multiclass_5 = dataset_loader(class_type)
+
+# each class type will save the most optimal model of each methodology (logistic regression, svc, rfc, etc)
+for class_to_train in class_type:
+    if class_to_train == 'binary':
+        binary_models = train_models(dataset_binary, class_to_train)
+    elif class_to_train == 'multiclass_3':
+        multiclass3_models = train_models(dataset_multiclass_3, class_to_train)
+    elif class_to_train == 'multiclass_5':
+        multiclass5_models = train_models(dataset_multiclass_5, class_to_train)
+
 
 # # decompose each set
 # X_train, Y_train = dataset[0]

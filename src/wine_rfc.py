@@ -15,7 +15,7 @@ import pathlib
 import os
 
 
-def wine_rfc(X_train, Y_train, X_val, Y_val):
+def wine_rfc(X_train, Y_train, X_val, Y_val, class_type):
     """
     Random Forest classifier optimal model generator.
     a meta estimator that fits a number of decision tree classifiers on various sub-samples of the dataset and
@@ -111,5 +111,5 @@ def wine_rfc(X_train, Y_train, X_val, Y_val):
         confusion_matrix_plot.xaxis.set_ticklabels(['Awful', 'Average', 'Excellent'])
         confusion_matrix_plot.yaxis.set_ticklabels(['Awful', 'Average', 'Excellent'])
         confusion_matrix_plot.figure.savefig(path)
-
+        plt.close()
     return model[best_accuracy]

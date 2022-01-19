@@ -17,18 +17,14 @@ import os
 
 
 def dataset_loader(classifier_type):
-    '''
+    """
     Loads the dataset. The path can be changed to consider another dataset.
     Missing values can be removed, or the option of dealing with that manually is
     available for the user. TODO - update this description
     :return: dataset - returns the training, test and validation sets
-    '''
+    """
     actual_dir = pathlib.Path().absolute()
 
-    # TODO - REMOVE THIS DEBUGGER LINE
-    # debbuger actual_dir:
-    # actual_dir = '/home/pedroguedes/PycharmProjects/ML_Project/src'
-    # actual_dir = '/home/pguedes/PycharmProjects/ML_Project/src'
     path = str(actual_dir) + '/data/winequality-red.csv'
 
     # load the entire dataset and labels for each attribute through pandas csv reader method
@@ -46,11 +42,9 @@ def dataset_loader(classifier_type):
         pairplot_figure.savefig(path)
         plt.close(pairplot_figure)
 
-    training_set, test_set, validation_set = dataset_splitter(raw_dataset, classifier_type)
+    binaryclass_set, multiclass3_set, multiclass5_set = dataset_splitter(raw_dataset, classifier_type)
 
-    dataset = [training_set, test_set, validation_set]
-
-    return dataset
+    return binaryclass_set, multiclass3_set, multiclass5_set
 
 
 def check_for_missing_values(raw_dataset):
@@ -99,19 +93,23 @@ def check_for_missing_values(raw_dataset):
 
 def dataset_splitter(raw_dataset, classifier_type):
     """
-    Splits the dataset so that three sets are made available being the return of this function.
+    Splits the dataset so that three sets are made available being the return of this function for each type of the
+    three sets of classes: binary, multiclass3, multiclass5
     A class field is made available in the loaded raw dataset: the classification of each wine.
     The 10 levels of classification might be used, but the dataset does not contain enough data to
-    consider all the 10 levels.
-    A histogram is generated with the new classification output.
+    consider all the 10 levels, being divided accordingly.
+    A histogram is generated with the new classification output for each set of classes.
     The attributes and outputs are separated from one another.
     Afterwards those are split so that the training set, validation set and testing set are made
     available.
-
     :param raw_dataset
-    :return: training_set - 60 % of the data
-             test_set - 20 % of the data
-             validation_set - 20 % of the data
+    :return:
+    :param raw_dataset:
+    :param classifier_type:
+    :return: returns the split sets in the different separated classes (binary, multiclass3, multiclass5).
+            training_set - 60 % of the data
+            test_set - 20 % of the data
+            validation_set - 20 % of the data
     """
 
     for class_type in classifier_type:
@@ -128,8 +126,6 @@ def dataset_splitter(raw_dataset, classifier_type):
             binary_training_set, binary_validation_set, binary_test_set = class_separation(raw_dataset,
                                                                                            class_output,
                                                                                            class_type)
-
-
 
         if class_type == 'multiclass_3':
             # class creation depending on the quality with 3 types - 0-awful, 1-average, 3-excellent
@@ -163,7 +159,7 @@ def dataset_splitter(raw_dataset, classifier_type):
             multiclass5_training_set, multiclass5_validation_set, multiclass5_test_set = class_separation(raw_dataset,
                                                                                                           class_output,
                                                                                                           class_type)
-    
+
     binaryclass = [binary_training_set, binary_validation_set, binary_test_set]
     multiclass3 = [multiclass3_training_set, multiclass3_validation_set, multiclass3_test_set]
     multiclass5 = [multiclass5_training_set, multiclass5_validation_set, multiclass5_test_set]
@@ -171,6 +167,16 @@ def dataset_splitter(raw_dataset, classifier_type):
 
 
 def class_separation(class_dataset, class_output, class_type):
+    """
+    The dataset for each class type (binary, multiclass3, multiclass5) is split in training, validation and test sets.
+    :param class_dataset: the dataset to be appended with the new output type
+    :param class_output: the converted outputs from dataset_splitter
+    :param class_type: the type of class output binary, multiclass3, multiclass5
+    :return: returns the split sets in the current class type:
+            training_set - 60 % of the data
+            test_set - 20 % of the data
+            validation_set - 20 % of the data
+    """
     class_dataset['classification'] = class_output
 
     # plot the labeled output as a histogram
