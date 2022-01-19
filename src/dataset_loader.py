@@ -20,7 +20,10 @@ def dataset_loader(classifier_type):
     """
     Loads the dataset. The path can be changed to consider another dataset.
     Missing values can be removed, or the option of dealing with that manually is
-    available for the user. TODO - update this description
+    available for the user
+    :param classifier_type: the classifier type, so that the data is divided differently (different outputs):
+            binary output
+            multiclass output (3 and 5)
     :return: dataset - returns the training, test and validation sets
     """
     actual_dir = pathlib.Path().absolute()
@@ -51,7 +54,7 @@ def check_for_missing_values(raw_dataset):
     """
     Returns a fixed dataset, with missing values being removed, or allowing
     the user to remove or complete them manually. It prints the indices of each missing element
-    for easier fixing.
+    for easier fixing
     :param raw_dataset: the dataset is loaded
     :return: returns the fixed dataset
     """
@@ -101,11 +104,9 @@ def dataset_splitter(raw_dataset, classifier_type):
     A histogram is generated with the new classification output for each set of classes.
     The attributes and outputs are separated from one another.
     Afterwards those are split so that the training set, validation set and testing set are made
-    available.
-    :param raw_dataset
-    :return:
-    :param raw_dataset:
-    :param classifier_type:
+    available
+    :param raw_dataset: original dataset is split depending on the type of output
+    :param classifier_type: output type (binary or multiclass)
     :return: returns the split sets in the different separated classes (binary, multiclass3, multiclass5).
             training_set - 60 % of the data
             test_set - 20 % of the data
@@ -168,7 +169,7 @@ def dataset_splitter(raw_dataset, classifier_type):
 
 def class_separation(class_dataset, class_output, class_type):
     """
-    The dataset for each class type (binary, multiclass3, multiclass5) is split in training, validation and test sets.
+    The dataset for each class type (binary, multiclass3, multiclass5) is split in training, validation and test sets
     :param class_dataset: the dataset to be appended with the new output type
     :param class_output: the converted outputs from dataset_splitter
     :param class_type: the type of class output binary, multiclass3, multiclass5

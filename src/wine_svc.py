@@ -9,10 +9,8 @@ from sklearn import svm
 from sklearn.metrics import confusion_matrix, accuracy_score
 import numpy as np
 import pickle
-import seaborn as sns
-import matplotlib.pyplot as plt
+from confusionmatrix_generator import confusionmatrix_generator
 import pathlib
-import os
 
 
 def wine_svc(X_train, Y_train, X_val, Y_val, class_type):
@@ -25,6 +23,7 @@ def wine_svc(X_train, Y_train, X_val, Y_val, class_type):
     :return: returns the most optimal logistic regression model
     """
 
+    # Specifies the kernel type to be used in the algorithm.
     kernel_array = ['linear', 'poly', 'rbf', 'sigmoid']
 
     # C parameter - Regularization parameters for SVC models
@@ -69,7 +68,7 @@ def wine_svc(X_train, Y_train, X_val, Y_val, class_type):
     best_accuracy = np.argmax(model_accuracy)
     # print the parameters
     optimized_parameters = model[best_accuracy].get_params(deep=True)
-    print('Overall optimal parameters in SVC: ', optimized_parameters)
+    print('Overall optimal parameters for ' + class_type + ' in SVC are:', optimized_parameters)
 
     # compute the individual predictions for the training and validation sets
     model_training_prediction = model[best_accuracy].predict(X_train)
@@ -79,30 +78,21 @@ def wine_svc(X_train, Y_train, X_val, Y_val, class_type):
     model_validation_accuracy = accuracy_score(Y_val, model_validation_prediction, normalize=True)
 
     # helps the user to visualize the results through the console
-    print('SVC Score')
+    print('SVC Score for ' + class_type)
     print('Training Accuracy Score is: ', model_training_accuracy)
     print('Validation Accuracy Score is: ', model_validation_accuracy)
 
     actual_dir = pathlib.Path().absolute()
-    path = str(actual_dir) + '/models/svc_model_py3_8.sav'
+    path = str(actual_dir) + '/models/' + class_type + '_vc_model_py3_8.sav'
     pickle.dump(model[best_accuracy], open(path, 'wb'))
 
     svc_conf_matrix = confusion_matrix(Y_val, model_predictions[best_accuracy])
     print(svc_conf_matrix)
 
-    actual_dir = pathlib.Path().absolute()
-    path = str(actual_dir) + '/figures/svc_cmatrix_val.png'
+    path = str(actual_dir) + '/figures/' + class_type + '_svc_cmatrix_val.png'
 
-    # Generate a Model Validation Confusion Matrix
-    # if the figure is not saved yet, it will be generated
-    if not os.path.exists(path):
-        confusion_matrix_plot = plt.subplot()
-        sns.heatmap(svc_conf_matrix, annot=True, fmt='g', ax=confusion_matrix_plot)
-        # labels, title and ticks
-        confusion_matrix_plot.set_ylabel('True labels')
-        confusion_matrix_plot.set_title('SVC Confusion Matrix - Validation Set')
-        confusion_matrix_plot.xaxis.set_ticklabels(['Awful', 'Average', 'Excellent'])
-        confusion_matrix_plot.yaxis.set_ticklabels(['Awful', 'Average', 'Excellent'])
-        confusion_matrix_plot.figure.savefig(path)
+    # generate a confusion matrix with the validation set
+    confusionmatrix_generator(svc_conf_matrix, class_type, Y_val,
+                              path, 'SVC Confusion Matrix - Validation Set')
 
     return model[best_accuracy]
