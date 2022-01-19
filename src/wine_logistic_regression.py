@@ -50,7 +50,11 @@ def wine_log_regression(X_train, Y_train, X_val, Y_val):
         for iteration in maximum_iterations:
             for C in C_parameter:
                 # appending the models in the list
-                model.append(LogisticRegression(penalty='l2', C=C, solver=solver, max_iter=iteration))
+                model.append(LogisticRegression(penalty='l2',
+                                                C=C,
+                                                solver=solver,
+                                                max_iter=iteration,
+                                                multi_class='multinomial'))
                 # fit the data to the current model
                 model[model_index].fit(X_train, Y_train)
                 # predict the values with the validation set

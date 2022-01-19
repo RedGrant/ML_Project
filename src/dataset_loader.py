@@ -16,7 +16,7 @@ import pathlib
 import os
 
 
-def dataset_loader():
+def dataset_loader(classifier_type):
     '''
     Loads the dataset. The path can be changed to consider another dataset.
     Missing values can be removed, or the option of dealing with that manually is
@@ -46,7 +46,7 @@ def dataset_loader():
         pairplot_figure.savefig(path)
         plt.close(pairplot_figure)
 
-    training_set, test_set, validation_set = dataset_splitter(raw_dataset)
+    training_set, test_set, validation_set = dataset_splitter(raw_dataset, classifier_type)
 
     dataset = [training_set, test_set, validation_set]
 
@@ -97,7 +97,7 @@ def check_for_missing_values(raw_dataset):
     return raw_dataset
 
 
-def dataset_splitter(raw_dataset):
+def dataset_splitter(raw_dataset, classifier_type):
     """
     Splits the dataset so that three sets are made available being the return of this function.
     A class field is made available in the loaded raw dataset: the classification of each wine.
@@ -114,36 +114,81 @@ def dataset_splitter(raw_dataset):
              validation_set - 20 % of the data
     """
 
-    # new field in the raw dataset - class output with specified thresholds
-    class_output = []
+    for class_type in classifier_type:
+        # new field in the raw dataset - class output with specified thresholds
+        class_output = []
 
-    # class creation depending on the quality - suggested by the dataset creators
-    # however the quality is not dropped, since it can still be considered
-    for quality_index in raw_dataset['quality']:
-        if 0 <= quality_index <= 3:
-            class_output.append('0')
-        elif 3 < quality_index <= 7:
-            class_output.append('1')
-        elif 7 < quality_index <= 10:
-            class_output.append('2')
-    raw_dataset['classification'] = class_output
+        if class_type == 'binary':
+            # class creation depending on the quality, being binary in this case (good-1 and bad wine-0)
+            for quality_index in raw_dataset['quality']:
+                if 0 <= quality_index < 7:
+                    class_output.append('0')
+                else:
+                    class_output.append('1')
+            binary_training_set, binary_validation_set, binary_test_set = class_separation(raw_dataset,
+                                                                                           class_output,
+                                                                                           class_type)
+
+
+
+        if class_type == 'multiclass_3':
+            # class creation depending on the quality with 3 types - 0-awful, 1-average, 3-excellent
+
+            for quality_index in raw_dataset['quality']:
+                if 0 <= quality_index <= 3:
+                    class_output.append('0')
+                elif 3 < quality_index <= 7:
+                    class_output.append('1')
+                elif 7 < quality_index <= 10:
+                    class_output.append('2')
+            multiclass3_training_set, multiclass3_validation_set, multiclass3_test_set = class_separation(raw_dataset,
+                                                                                                          class_output,
+                                                                                                          class_type)
+
+        if class_type == 'multiclass_5':
+            # class creation depending on the quality with 5 types (stars) - 1 - one star, 2 - two stars,
+            # 3 - three stars 4 - four stars, 5 - five stars
+
+            for quality_index in raw_dataset['quality']:
+                if 0 <= quality_index <= 2:
+                    class_output.append('1')
+                elif 3 <= quality_index <= 4:
+                    class_output.append('2')
+                elif 5 <= quality_index <= 6:
+                    class_output.append('3')
+                elif 7 <= quality_index <= 8:
+                    class_output.append('4')
+                elif 9 <= quality_index <= 10:
+                    class_output.append('5')
+            multiclass5_training_set, multiclass5_validation_set, multiclass5_test_set = class_separation(raw_dataset,
+                                                                                                          class_output,
+                                                                                                          class_type)
+    
+    binaryclass = [binary_training_set, binary_validation_set, binary_test_set]
+    multiclass3 = [multiclass3_training_set, multiclass3_validation_set, multiclass3_test_set]
+    multiclass5 = [multiclass5_training_set, multiclass5_validation_set, multiclass5_test_set]
+    return binaryclass, multiclass3, multiclass5
+
+
+def class_separation(class_dataset, class_output, class_type):
+    class_dataset['classification'] = class_output
 
     # plot the labeled output as a histogram
 
     actual_dir = pathlib.Path().absolute()
-    path = str(actual_dir) + '/figures/classification_histogram.png'
+    path = str(actual_dir) + '/figures/' + class_type + '_classification_histogram.png'
 
     # if the figure is not saved yet, it will be generated
     if not os.path.exists(path):
         # pair plotting the data
-        histogram_figure = sb.countplot(x='classification', data=raw_dataset)
+        histogram_figure = sb.countplot(x='classification', data=class_dataset)
         histogram_figure = histogram_figure.get_figure()
         histogram_figure.savefig(path)
         plt.close(histogram_figure)
 
     # separating attributes and outputs
-    attributes = raw_dataset.iloc[:, :11]
-    output = raw_dataset.iloc[:, 12]
+    attributes = class_dataset.iloc[:, :11]
+    output = class_dataset.iloc[:, 12]
 
     # set aside 20% of train and test data for evaluation
     X_train, X_test, Y_train, Y_test = train_test_split(attributes, output,
@@ -155,7 +200,7 @@ def dataset_splitter(raw_dataset):
 
     # generating easier output
     training_set = [X_train, Y_train]
-    test_set = [X_test, Y_test]
     validation_set = [X_val, Y_val]
+    test_set = [X_test, Y_test]
 
-    return training_set, test_set, validation_set
+    return training_set, validation_set, test_set

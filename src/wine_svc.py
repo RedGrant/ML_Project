@@ -52,7 +52,10 @@ def wine_svc(X_train, Y_train, X_val, Y_val):
             for C in C_parameter:
                 for gamma in gamma_array:
                     # append all the generated models with different parameters
-                    model.append(svm.SVC(C=C, kernel=kernel, degree=degree, gamma=gamma))
+                    model.append(svm.SVC(C=C,
+                                         kernel=kernel,
+                                         degree=degree,
+                                         gamma=gamma))
 
                     # fit the data to each model
                     model[model_index].fit(X_train, Y_train)
