@@ -9,15 +9,16 @@
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score
-from wine_logistic_regression import wine_log_regression
+from sklearn.metrics import accuracy_score, classification_report
 import pathlib
 import os
 import pickle
 
 # created functions
 from dataset_loader import dataset_loader
+from wine_logistic_regression import wine_log_regression
 from wine_svc import wine_svc
+from wine_rfc import wine_rfc
 
 
 # load the dataset without any missing data and divided in training, validation and test sets
@@ -51,9 +52,19 @@ else:
 
 path = str(actual_dir) + '/models/svc_model_py3_8.sav'
 
-# modeling the Logistic Regression Model. If one is already trained and optimized, it is going to be loaded instead
+# modeling the SVC Model. If one is already trained and optimized, it is going to be loaded instead
 if not os.path.exists(path):
     svc_model = wine_svc(X_train, Y_train, X_val, Y_val)
 else:
     svc_model = pickle.load(open(path, 'rb'))
+
+path = str(actual_dir) + '/models/rfc_model_py3_8.sav'
+
+# modeling the Random Forest Classifier Model. If one is already trained and optimized, it is going to be loaded instead
+if not os.path.exists(path):
+    rfc_model = wine_rfc(X_train, Y_train, X_val, Y_val)
+else:
+    rfc_model = pickle.load(open(path, 'rb'))
+
+
 

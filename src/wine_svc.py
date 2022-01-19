@@ -18,10 +18,11 @@ import os
 def wine_svc(X_train, Y_train, X_val, Y_val):
     """
     SVC classifier optimal model generator.
-    :param training: training set
-    :param validation: validation set
-    :param test: testing set
-    :return: returns the optimal model
+    :param X_train: attributes training set
+    :param Y_train: output training set
+    :param X_val: attributes validation set
+    :param Y_val: output validation set
+    :return: returns the most optimal logistic regression model
     """
 
     kernel_array = ['linear', 'poly', 'rbf', 'sigmoid']
