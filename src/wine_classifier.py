@@ -5,15 +5,10 @@
 
 # *********************************** ---------------------------------- *********************************** #
 
-# Libraries' import
-import numpy as np
-import pandas as pd
-
-from sklearn.metrics import accuracy_score, classification_report
-
 # created functions
 from dataset_loader import dataset_loader
 from train_models import train_models
+from test_models import test_models
 
 class_type = ['binary', 'multiclass_3', 'multiclass_5']
 # load the dataset without any missing data and divided in training, validation and test sets
@@ -28,5 +23,4 @@ for class_to_train in class_type:
     elif class_to_train == 'multiclass_5':
         multiclass5_models = train_models(dataset_multiclass_5, class_to_train)
 
-
-# TODO - Generate classification reports and print and save them as txt
+test_models(dataset_binary, binary_models, class_type[0])

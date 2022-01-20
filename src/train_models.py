@@ -41,8 +41,6 @@ def train_models(dataset, class_type):
     # Perform standardization by centering and scaling.
     X_train = scaler.transform(X_train)
     X_val = scaler.transform(X_val)
-    # TODO - Perform the scaler in the testing algorithm
-    X_Test = scaler.transform(X_test)
 
     # Transform series to numpy
     Y_train = Y_train.to_numpy()

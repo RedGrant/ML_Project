@@ -4,7 +4,6 @@
 # FEUP | PDEEC | Machine Learning 2021/2022
 
 # *********************************** ---------------------------------- *********************************** #
-from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, accuracy_score
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
@@ -34,10 +33,6 @@ def wine_deep(X_train, Y_train, X_val, Y_val, class_type):
         output_neurons = 1
         loss = "binary_crossentropy"
         output_activation = 'relu'
-
-    #physical_devices = tf.config.list_physical_devices('GPU')
-    #for device in physical_devices:
-    #    tf.config.experimental.set_memory_growth(device, True)
 
     # shallow model training:
     shallow_model = tf.keras.models.Sequential()
