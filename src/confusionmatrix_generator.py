@@ -4,11 +4,11 @@ import seaborn as sns
 import numpy as np
 
 
-def confusionmatrix_generator(log_reg_conf_matrix, class_type, class_outputs, path, title):
+def confusionmatrix_generator(conf_matrix, class_type, class_outputs, path, title):
     """
     Generates confusion matrices depending on the unique class outputs and class type.
     Saves one if none exist.
-    :param log_reg_conf_matrix: computed confusion matrix to be plotted and saved
+    :param conf_matrix: computed confusion matrix to be plotted and saved
     :param class_type: type of expected output
     :param class_outputs: outputs to search for unique values
     :param path: path to check if exist. Otherwise, the figure will be saved there
@@ -19,7 +19,7 @@ def confusionmatrix_generator(log_reg_conf_matrix, class_type, class_outputs, pa
     # if the figure is not saved yet, it will be generated
     if not os.path.exists(path):
         confusion_matrix_plot = plt.subplot()
-        sns.heatmap(log_reg_conf_matrix, annot=True, fmt='g', ax=confusion_matrix_plot)
+        sns.heatmap(conf_matrix, annot=True, fmt='g', ax=confusion_matrix_plot)
         # labels, title and ticks
         confusion_matrix_plot.set_xlabel('Predicted labels')
         confusion_matrix_plot.set_ylabel('True labels')
@@ -49,15 +49,15 @@ def stars_printer(class_values):
     possible_stars = np.sort(possible_stars)
     star_list = []
     for index in possible_stars:
-        if index == '1':
+        if index == 1:
             star_list.append('*')
-        elif index == '2':
+        elif index == 2:
             star_list.append('**')
-        elif index == '3':
+        elif index == 3:
             star_list.append('***')
-        elif index == '4':
+        elif index == 4:
             star_list.append('****')
-        elif index == '5':
+        elif index == 5:
             star_list.append('*****')
 
     return star_list

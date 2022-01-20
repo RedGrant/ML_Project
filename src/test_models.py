@@ -15,6 +15,15 @@ from confusionmatrix_generator import confusionmatrix_generator
 
 
 def test_models(dataset, models, class_type):
+    """
+    Tests the trained models with the already split test set.
+    Classification reports are generated and saved as csv files.
+    Confusion matrices are saved as figures.
+    :param dataset: the dataset for the specific class output type
+    :param models: the trained models
+    :param class_type: the class output type
+    :return: None
+    """
     model_name = ['Log_Reg_Model', 'SVC_Model', 'RFC_Model', 'SGD_Model', 'DL_Deep_Model', 'DL_Shallow_Model']
 
     # extract the split test data from the already pre-processed data set
@@ -46,15 +55,12 @@ def test_models(dataset, models, class_type):
         actual_dir = pathlib.Path().absolute()
         path = str(actual_dir) + '/classification_reports/' + model_name[
             model_index] + '_classification_report_' + class_type + '.csv'
-        df = classification_report(Y_test, model_predictions[model_index])
-        dataframe = pd.DataFrame.from_dict(df)
-        dataframe.to_csv(path, index=False)
+        report = classification_report(Y_test, model_predictions[model_index])
+        report_dataframe = pd.DataFrame.from_dict(report)
+        report_dataframe.to_csv(path, index=False)
 
-        print(classification_report(Y_test, model_predictions[model_index]))
-
-        print(model_name[model_index] + ' for ' + class_type + ':')
-        print('Test Accuracy Score is: ', model_accuracy[model_index])
-        print('Test f1 Score is: ', model_f1score[model_index])
+        # print classification report
+        print(report)
 
         # generate confusion matrices for each model test
         conf_matrix = confusion_matrix(Y_test, model_predictions[model_index])
@@ -64,4 +70,6 @@ def test_models(dataset, models, class_type):
 
         # generate a confusion matrix with the validation set
         confusionmatrix_generator(conf_matrix, class_type, Y_test,
-                                  path, model_name[model_index] + ' Confusion Matrix - Test Set')
+                                  path, class_type + ' ' + model_name[model_index] + ' Confusion Matrix - Test Set')
+
+    return None
