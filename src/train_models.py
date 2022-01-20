@@ -10,12 +10,14 @@ from wine_logistic_regression import wine_log_regression
 from wine_svc import wine_svc
 from wine_rfc import wine_rfc
 from wine_stochastic import wine_stochastic
+from wine_deep import wine_deep
 
 # importing libraries
 from sklearn.preprocessing import StandardScaler
 import pathlib
 import os
 import pickle
+from tensorflow import keras
 
 
 def train_models(dataset, class_type):
@@ -56,14 +58,14 @@ def train_models(dataset, class_type):
     else:
         log_reg_model = pickle.load(open(path, 'rb'))
 
-    path = str(actual_dir) + '/models/'+class_type+'_svc_model_py3_8.sav'
+    path = str(actual_dir) + '/models/' + class_type + '_svc_model_py3_8.sav'
     # modeling the SVC Model. If one is already trained and optimized, it is going to be loaded instead
     if not os.path.exists(path):
         svc_model = wine_svc(X_train, Y_train, X_val, Y_val, class_type)
     else:
         svc_model = pickle.load(open(path, 'rb'))
 
-    path = str(actual_dir) + '/models/'+class_type+'_rfc_model_py3_8.sav'
+    path = str(actual_dir) + '/models/' + class_type + '_rfc_model_py3_8.sav'
     # modeling the Random Forest Classifier Model. If one is already trained and optimized,
     # it is going to be loaded instead
     if not os.path.exists(path):
@@ -79,5 +81,14 @@ def train_models(dataset, class_type):
     else:
         sgd_model = pickle.load(open(path, 'rb'))
 
-    optimized_models = [log_reg_model, svc_model, rfc_model, sgd_model]
+    path1 = str(actual_dir) + '/models/' + class_type + '_dl_deep_py3_8.sav'
+    path2 = str(actual_dir) + '/models/' + class_type + '_dl_shallow_py3_8.sav'
+
+    if not os.path.exists(path1) and not os.path.exists(path2):
+        shallow_model, deep_model = wine_deep(X_train, Y_train, X_val, Y_val, class_type)
+    else:
+        deep_model = keras.models.load_model(path1)
+        shallow_model = keras.models.load_model(path2)
+
+    optimized_models = [log_reg_model, svc_model, rfc_model, sgd_model, deep_model, shallow_model]
     return optimized_models

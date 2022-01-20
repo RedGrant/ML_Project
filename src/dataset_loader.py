@@ -121,9 +121,9 @@ def dataset_splitter(raw_dataset, classifier_type):
             # class creation depending on the quality, being binary in this case (good-1 and bad wine-0)
             for quality_index in raw_dataset['quality']:
                 if 0 <= quality_index < 7:
-                    class_output.append('0')
+                    class_output.append(0)
                 else:
-                    class_output.append('1')
+                    class_output.append(1)
             binary_training_set, binary_validation_set, binary_test_set = class_separation(raw_dataset,
                                                                                            class_output,
                                                                                            class_type)
@@ -133,11 +133,11 @@ def dataset_splitter(raw_dataset, classifier_type):
 
             for quality_index in raw_dataset['quality']:
                 if 0 <= quality_index <= 3:
-                    class_output.append('0')
+                    class_output.append(0)
                 elif 3 < quality_index <= 7:
-                    class_output.append('1')
+                    class_output.append(1)
                 elif 7 < quality_index <= 10:
-                    class_output.append('2')
+                    class_output.append(2)
             multiclass3_training_set, multiclass3_validation_set, multiclass3_test_set = class_separation(raw_dataset,
                                                                                                           class_output,
                                                                                                           class_type)
@@ -148,15 +148,15 @@ def dataset_splitter(raw_dataset, classifier_type):
 
             for quality_index in raw_dataset['quality']:
                 if 0 <= quality_index <= 2:
-                    class_output.append('1')
+                    class_output.append(1)
                 elif 3 <= quality_index <= 4:
-                    class_output.append('2')
+                    class_output.append(2)
                 elif 5 <= quality_index <= 6:
-                    class_output.append('3')
+                    class_output.append(3)
                 elif 7 <= quality_index <= 8:
-                    class_output.append('4')
+                    class_output.append(4)
                 elif 9 <= quality_index <= 10:
-                    class_output.append('5')
+                    class_output.append(5)
             multiclass5_training_set, multiclass5_validation_set, multiclass5_test_set = class_separation(raw_dataset,
                                                                                                           class_output,
                                                                                                           class_type)
