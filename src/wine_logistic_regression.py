@@ -50,7 +50,7 @@ def wine_log_regression(X_train, Y_train, X_val, Y_val, class_type):
     model_accuracy = []
     model_index = 0
 
-    print("Training " + class_type + "Log Reg")
+    print("Training " + class_type + " Log Reg")
     # test which is the best model varying the parameters set above
     for solver in solver_array:
         for iteration in maximum_iterations:

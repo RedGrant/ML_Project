@@ -45,7 +45,7 @@ def wine_svc(X_train, Y_train, X_val, Y_val, class_type):
     model_predictions = []
     model_index = 0
 
-    print("Training " + class_type + "SVC")
+    print("Training " + class_type + " SVC")
     # creating and training the models
     for kernel in kernel_array:
         for degree in degree_array:

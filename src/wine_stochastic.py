@@ -55,7 +55,7 @@ def wine_stochastic(X_train, Y_train, X_val, Y_val, class_type):
     model_predictions = []
     model_index = 0
 
-    print("Training " + class_type + "SGD")
+    print("Training " + class_type + " SGD")
     # creating and training the models
     for loss in loss_array:
         for penalty in penalty_array:

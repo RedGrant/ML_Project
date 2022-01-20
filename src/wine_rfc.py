@@ -49,7 +49,7 @@ def wine_rfc(X_train, Y_train, X_val, Y_val, class_type):
     model_predictions = []
     model_index = 0
 
-    print("Training " + class_type + "RFC")
+    print("Training " + class_type + " RFC")
     # creating and training the models
     for n_estimators in n_estimators_array:
         for max_features in max_features_array:
