@@ -99,6 +99,6 @@ def wine_log_regression(X_train, Y_train, X_val, Y_val, class_type):
 
     # generate a confusion matrix with the validation set
     confusionmatrix_generator(log_reg_conf_matrix, class_type, Y_val,
-                              path, 'Logistic Regression Confusion Matrix - Validation Set')
+                              path, class_type + ' ' + ' Log Reg Confusion Matrix - Validation Set')
 
     return model[best_accuracy]

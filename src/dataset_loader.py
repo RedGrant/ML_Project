@@ -45,9 +45,9 @@ def dataset_loader(classifier_type):
         pairplot_figure.savefig(path)
         plt.close(pairplot_figure)
 
-    binaryclass_set, multiclass3_set, multiclass5_set = dataset_splitter(raw_dataset, classifier_type)
+    binaryclass_set, multiclass3_set, multiclass_stars_set, multiclass_6_set = dataset_splitter(raw_dataset, classifier_type)
 
-    return binaryclass_set, multiclass3_set, multiclass5_set
+    return binaryclass_set, multiclass3_set, multiclass_stars_set, multiclass_6_set
 
 
 def check_for_missing_values(raw_dataset):
@@ -71,7 +71,7 @@ def check_for_missing_values(raw_dataset):
             for col_index in range(raw_dataset.T.shape[1]):
                 if np.isnan(raw_dataset.T[col_index][line_index]):
                     values_to_remove = np.append(values_to_remove, col_index)
-                    print("Line index: ", line_index, "and collumn index:", col_index)
+                    print("Line index: ", line_index, "and column index:", col_index)
 
         print("Do Y - remove line. Any other input - keep it.")
         decision = str(input())
@@ -97,7 +97,7 @@ def check_for_missing_values(raw_dataset):
 def dataset_splitter(raw_dataset, classifier_type):
     """
     Splits the dataset so that three sets are made available being the return of this function for each type of the
-    three sets of classes: binary, multiclass3, multiclass5
+    three sets of classes: binary, multiclass_3, multiclass_stars, multiclass_6
     A class field is made available in the loaded raw dataset: the classification of each wine.
     The 10 levels of classification might be used, but the dataset does not contain enough data to
     consider all the 10 levels, being divided accordingly.
@@ -107,7 +107,8 @@ def dataset_splitter(raw_dataset, classifier_type):
     available
     :param raw_dataset: original dataset is split depending on the type of output
     :param classifier_type: output type (binary or multiclass)
-    :return: returns the split sets in the different separated classes (binary, multiclass3, multiclass5).
+    :return: returns the split sets in the different separated classes (binary, multiclass_3, multiclass_stars,
+    multiclass_6).
             training_set - 60 % of the data
             test_set - 20 % of the data
             validation_set - 20 % of the data
@@ -142,7 +143,7 @@ def dataset_splitter(raw_dataset, classifier_type):
                                                                                                           class_output,
                                                                                                           class_type)
 
-        if class_type == 'multiclass_5':
+        if class_type == 'multiclass_stars':
             # class creation depending on the quality with 5 types (stars) - 1 - one star, 2 - two stars,
             # 3 - three stars 4 - four stars, 5 - five stars
 
@@ -157,22 +158,39 @@ def dataset_splitter(raw_dataset, classifier_type):
                     class_output.append(4)
                 elif 9 <= quality_index <= 10:
                     class_output.append(5)
-            multiclass5_training_set, multiclass5_validation_set, multiclass5_test_set = class_separation(raw_dataset,
+            multiclass_stars_training_set, multiclass_stars_validation_set, multiclass_stars_test_set = class_separation(raw_dataset,
                                                                                                           class_output,
                                                                                                           class_type)
+        if class_type == 'multiclass_6':
+            # class creation depending on the quality with 5 types (stars) - 1 - one star, 2 - two stars,
+            # 3 - three stars 4 - four stars, 5 - five stars
+
+            unique_quality = np.unique(raw_dataset['quality'])
+            for quality_value in unique_quality:
+                for quality_index in raw_dataset['quality']:
+                    if quality_index == quality_value:
+                        class_output.append(quality_value)
+
+            multiclass_6_training_set, multiclass_6_validation_set, multiclass_6_test_set = class_separation(
+                raw_dataset,
+                class_output,
+                class_type)
 
     binaryclass = [binary_training_set, binary_validation_set, binary_test_set]
     multiclass3 = [multiclass3_training_set, multiclass3_validation_set, multiclass3_test_set]
-    multiclass5 = [multiclass5_training_set, multiclass5_validation_set, multiclass5_test_set]
-    return binaryclass, multiclass3, multiclass5
+    multiclass_stars = [multiclass_stars_training_set, multiclass_stars_validation_set, multiclass_stars_test_set]
+    multiclass_6 = [multiclass_6_training_set, multiclass_6_validation_set, multiclass_6_test_set]
+
+    return binaryclass, multiclass3, multiclass_stars, multiclass_6
 
 
 def class_separation(class_dataset, class_output, class_type):
     """
-    The dataset for each class type (binary, multiclass3, multiclass5) is split in training, validation and test sets
+    The dataset for each class type (binary, multiclass3, multiclass_stars, multiclass6) is split in training,
+    validation and test sets
     :param class_dataset: the dataset to be appended with the new output type
     :param class_output: the converted outputs from dataset_splitter
-    :param class_type: the type of class output binary, multiclass3, multiclass5
+    :param class_type: the type of class output binary, multiclass3, multiclass_stars, multiclass6
     :return: returns the split sets in the current class type:
             training_set - 60 % of the data
             test_set - 20 % of the data

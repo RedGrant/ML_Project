@@ -107,6 +107,6 @@ def wine_stochastic(X_train, Y_train, X_val, Y_val, class_type):
 
     # generate a confusion matrix with the validation set
     confusionmatrix_generator(sgd_conf_matrix, class_type, Y_val,
-                              path, 'Stochastic Gradient Descent Classifier Confusion Matrix - Validation Set')
+                              path, class_type + ' ' + ' SGD Confusion Matrix - Validation Set')
 
     return model[best_accuracy]

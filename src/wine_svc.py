@@ -94,6 +94,6 @@ def wine_svc(X_train, Y_train, X_val, Y_val, class_type):
 
     # generate a confusion matrix with the validation set
     confusionmatrix_generator(svc_conf_matrix, class_type, Y_val,
-                              path, 'SVC Confusion Matrix - Validation Set')
+                              path, class_type + ' ' + ' SVC Confusion Matrix - Validation Set')
 
     return model[best_accuracy]

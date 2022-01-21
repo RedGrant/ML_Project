@@ -31,9 +31,15 @@ def confusionmatrix_generator(conf_matrix, class_type, class_outputs, path, titl
         elif class_type == 'multiclass_3':
             confusion_matrix_plot.xaxis.set_ticklabels(['Awful', 'Average', 'Excellent'])
             confusion_matrix_plot.yaxis.set_ticklabels(['Awful', 'Average', 'Excellent'])
-        elif class_type == 'multiclass_5':
+        elif class_type == 'multiclass_stars':
             confusion_matrix_plot.xaxis.set_ticklabels(stars_printer(class_outputs))
             confusion_matrix_plot.yaxis.set_ticklabels(stars_printer(class_outputs))
+
+        elif class_type == 'multiclass_6':
+            class_labels = unique_values_label_encoder = np.sort(np.unique(class_outputs))
+            class_labels = [str(str_labels) for str_labels in class_labels]
+            confusion_matrix_plot.xaxis.set_ticklabels(class_labels)
+            confusion_matrix_plot.yaxis.set_ticklabels(class_labels)
 
         confusion_matrix_plot.figure.savefig(path)
         plt.close('all')

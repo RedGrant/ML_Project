@@ -100,6 +100,6 @@ def wine_rfc(X_train, Y_train, X_val, Y_val, class_type):
 
     # generate a confusion matrix with the validation set
     confusionmatrix_generator(rfc_conf_matrix, class_type, Y_val,
-                              path, 'Random Forest Classifier Confusion Matrix - Validation Set')
+                              path, class_type + ' ' + ' RFC Confusion Matrix - Validation Set')
 
     return model[best_accuracy]
