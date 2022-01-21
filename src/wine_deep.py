@@ -23,10 +23,9 @@ def wine_deep(X_train, Y_train, X_val, Y_val, class_type):
         encoder = LabelEncoder()
         encoder.fit(Y_val)
         Y_val = encoder.fit_transform(Y_val)
-
-        loss = "categorical_crossentropy"
         Y_train = tf.keras.utils.to_categorical(Y_train, output_neurons)
         Y_val = tf.keras.utils.to_categorical(Y_val, output_neurons)
+        loss = "categorical_crossentropy"
         output_activation = 'softmax'
 
     else:

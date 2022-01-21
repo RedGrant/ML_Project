@@ -23,4 +23,8 @@ for class_to_train in class_type:
     elif class_to_train == 'multiclass_5':
         multiclass5_models = train_models(dataset_multiclass_5, class_to_train)
 
+# test the models
 test_models(dataset_binary, binary_models, class_type[0])
+test_models(dataset_multiclass_3, multiclass3_models, class_type[1])
+test_models(dataset_multiclass_5, multiclass5_models, class_type[2])
+
