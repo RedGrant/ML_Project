@@ -45,7 +45,24 @@ def dataset_loader(classifier_type):
         pairplot_figure.savefig(path)
         plt.close(pairplot_figure)
 
-    binaryclass_set, multiclass3_set, multiclass_stars_set, multiclass_6_set = dataset_splitter(raw_dataset, classifier_type)
+    # generate a correlation heatmap between the data available
+    path = str(actual_dir) + '/figures/correlation_heatmap_wine_dataset.png'
+    if not os.path.exists(path):
+        correlations = raw_dataset.corr()
+        heatmap_figure = plt.subplot()
+        heatmap_figure = sb.heatmap(correlations, ax=heatmap_figure)
+        heatmap_figure.figure.savefig(path)
+        plt.close('all')
+
+    # generate a descriptive statistics txt file
+    path = str(actual_dir) + '/data/descriptive_statistics.csv'
+    if not os.path.exists(path):
+        with open(path, "w") as text_file:
+            descriptive_statistic = raw_dataset.describe(include='all')
+            descriptive_statistic.to_csv(path)
+
+    binaryclass_set, multiclass3_set, multiclass_stars_set, multiclass_6_set = dataset_splitter(raw_dataset,
+                                                                                                classifier_type)
 
     return binaryclass_set, multiclass3_set, multiclass_stars_set, multiclass_6_set
 
@@ -158,9 +175,10 @@ def dataset_splitter(raw_dataset, classifier_type):
                     class_output.append(4)
                 elif 9 <= quality_index <= 10:
                     class_output.append(5)
-            multiclass_stars_training_set, multiclass_stars_validation_set, multiclass_stars_test_set = class_separation(raw_dataset,
-                                                                                                          class_output,
-                                                                                                          class_type)
+            multiclass_stars_training_set, multiclass_stars_validation_set, multiclass_stars_test_set = class_separation(
+                raw_dataset,
+                class_output,
+                class_type)
         if class_type == 'multiclass_6':
             # class creation depending on the quality with 5 types (stars) - 1 - one star, 2 - two stars,
             # 3 - three stars 4 - four stars, 5 - five stars

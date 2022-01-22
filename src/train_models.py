@@ -30,7 +30,6 @@ def train_models(dataset, class_type):
     # decompose each set
     X_train, Y_train = dataset[0]
     X_val, Y_val = dataset[1]
-    X_test, Y_test = dataset[2]
 
     # The input variables are those that the network takes on the input or visible layer in order to make a prediction.
     # The scale and distribution of the data drawn from the domain may be different for each variable.
