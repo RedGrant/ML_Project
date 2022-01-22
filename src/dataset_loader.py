@@ -53,6 +53,9 @@ def dataset_loader(classifier_type):
         heatmap_figure = sb.heatmap(correlations, ax=heatmap_figure)
         heatmap_figure.figure.savefig(path)
         plt.close('all')
+        path = str(actual_dir) + '/data/correlation_pearson_wine_dataset.csv'
+        correlations.to_csv(path)
+
 
     # generate a descriptive statistics txt file
     path = str(actual_dir) + '/data/descriptive_statistics.csv'
