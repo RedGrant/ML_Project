@@ -82,7 +82,7 @@ def train_models(dataset, class_type):
     path1 = str(actual_dir) + '/models/' + class_type + '_dl_deep_py3_8.sav'
     path2 = str(actual_dir) + '/models/' + class_type + '_dl_shallow_py3_8.sav'
 
-    if not os.path.exists(path1) and not os.path.exists(path2):
+    if not os.path.exists(path1) or not os.path.exists(path2):
         shallow_model, deep_model = wine_deep(X_train, Y_train, X_val, Y_val, class_type)
     else:
         deep_model = keras.models.load_model(path1)

@@ -28,7 +28,11 @@ for class_to_train in class_type:
 # test the models only if all the models were trained
 if len(binary_models) == 6 and len(multiclass3_models) == 6 and len(multiclass_stars_models) == 6 and len(
         multiclass6_models) == 6:
+    print("---------------- Test binary models ----------------")
     test_models(dataset_binary, binary_models, class_type[0])
+    print("---------------- Test 3 class models ----------------")
     test_models(dataset_multiclass_3, multiclass3_models, class_type[1])
+    print("---------------- Test star class models ----------------")
     test_models(dataset_multiclass_stars, multiclass_stars_models, class_type[2])
+    print("---------------- Test quality class models ----------------")
     test_models(dataset_multiclass_6, multiclass6_models, class_type[3])

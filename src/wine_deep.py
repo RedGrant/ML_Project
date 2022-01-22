@@ -33,6 +33,7 @@ def wine_deep(X_train, Y_train, X_val, Y_val, class_type):
         loss = "binary_crossentropy"
         output_activation = 'relu'
 
+    callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)
     # shallow model training:
     shallow_model = tf.keras.models.Sequential()
 
@@ -48,10 +49,11 @@ def wine_deep(X_train, Y_train, X_val, Y_val, class_type):
                           metrics=['accuracy'])
 
     shallow_model_training_history = shallow_model.fit(X_train, Y_train,
-                                                      epochs=20,
-                                                      batch_size=1,
-                                                      validation_data=(X_val, Y_val),
-                                                      validation_steps=10)
+                                                       epochs=20,
+                                                       batch_size=1,
+                                                       validation_data=(X_val, Y_val),
+                                                       validation_steps=10,
+                                                       callbacks=[callback])
 
     # deep model training:
     deep_model = tf.keras.models.Sequential()
@@ -72,7 +74,8 @@ def wine_deep(X_train, Y_train, X_val, Y_val, class_type):
                                                  epochs=20,
                                                  batch_size=1,
                                                  validation_data=(X_val, Y_val),
-                                                 validation_steps=10)
+                                                 validation_steps=10,
+                                                 callbacks=[callback])
     deep_model.summary()
     shallow_model.summary()
 
@@ -91,6 +94,9 @@ def wine_deep(X_train, Y_train, X_val, Y_val, class_type):
     pyplot.plot()
     pyplot.title('Deep Learning Deep Accuracy ' + class_type)
     pyplot.plot(deep_model_training_history.history['accuracy'], label='train')
+    pyplot.plot(deep_model_training_history.history['val_accuracy'], label='val')
+    pyplot.xlabel('epoch')
+    pyplot.ylabel('accuracy')
     pyplot.legend()
     pyplot.savefig(path)
     pyplot.close('all')
@@ -99,6 +105,9 @@ def wine_deep(X_train, Y_train, X_val, Y_val, class_type):
     pyplot.plot()
     pyplot.title('Deep Learning Deep Loss ' + class_type)
     pyplot.plot(deep_model_training_history.history['loss'], label='train')
+    pyplot.plot(deep_model_training_history.history['val_loss'], label='val')
+    pyplot.xlabel('epoch')
+    pyplot.ylabel('loss')
     pyplot.legend()
     pyplot.savefig(path)
     pyplot.close('all')
@@ -108,6 +117,9 @@ def wine_deep(X_train, Y_train, X_val, Y_val, class_type):
     pyplot.plot()
     pyplot.title('Deep Learning Shallow Accuracy ' + class_type)
     pyplot.plot(shallow_model_training_history.history['accuracy'], label='train')
+    pyplot.plot(shallow_model_training_history.history['val_accuracy'], label='val')
+    pyplot.xlabel('epoch')
+    pyplot.ylabel('accuracy')
     pyplot.legend()
     pyplot.savefig(path)
     pyplot.close('all')
@@ -116,6 +128,9 @@ def wine_deep(X_train, Y_train, X_val, Y_val, class_type):
     pyplot.plot()
     pyplot.title('Deep Learning Shallow Loss ' + class_type)
     pyplot.plot(shallow_model_training_history.history['loss'], label='train')
+    pyplot.plot(shallow_model_training_history.history['val_loss'], label='val')
+    pyplot.xlabel('epoch')
+    pyplot.ylabel('loss')
     pyplot.legend()
     pyplot.savefig(path)
     pyplot.close('all')

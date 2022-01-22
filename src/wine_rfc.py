@@ -11,7 +11,7 @@ import numpy as np
 import pickle
 import pathlib
 from confusionmatrix_generator import confusionmatrix_generator
-
+from tqdm import tqdm
 
 def wine_rfc(X_train, Y_train, X_val, Y_val, class_type):
     """
@@ -51,24 +51,26 @@ def wine_rfc(X_train, Y_train, X_val, Y_val, class_type):
 
     print("Training " + class_type + " RFC")
     # creating and training the models
-    for n_estimators in n_estimators_array:
-        for max_features in max_features_array:
-            for min_samples_split in min_samples_split_array:
-                for min_samples_leaf in min_samples_leaf_array:
-                    for bootstrap in bootstrap_array:
-                        # append all the generated models with different parameters
-                        model.append(RandomForestClassifier(n_estimators=n_estimators,
-                                                            max_features=max_features,
-                                                            min_samples_split=min_samples_split,
-                                                            min_samples_leaf=min_samples_leaf,
-                                                            bootstrap=bootstrap))
-                        # fit the data to each model
-                        model[model_index].fit(X_train, Y_train)
-                        # predict the values with the validation set
-                        model_predictions.append(model[model_index].predict(X_val))
-                        # compute the current model's accuracy, normalized
-                        model_accuracy.append(accuracy_score(Y_val, model_predictions[model_index], normalize=True))
-                        model_index += 1
+    with tqdm(total=len(n_estimators_array)) as pbar:
+        for n_estimators in n_estimators_array:
+            for max_features in max_features_array:
+                for min_samples_split in min_samples_split_array:
+                    for min_samples_leaf in min_samples_leaf_array:
+                        for bootstrap in bootstrap_array:
+                            # append all the generated models with different parameters
+                            model.append(RandomForestClassifier(n_estimators=n_estimators,
+                                                                max_features=max_features,
+                                                                min_samples_split=min_samples_split,
+                                                                min_samples_leaf=min_samples_leaf,
+                                                                bootstrap=bootstrap))
+                            # fit the data to each model
+                            model[model_index].fit(X_train, Y_train)
+                            # predict the values with the validation set
+                            model_predictions.append(model[model_index].predict(X_val))
+                            # compute the current model's accuracy, normalized
+                            model_accuracy.append(accuracy_score(Y_val, model_predictions[model_index], normalize=True))
+                            model_index += 1
+            pbar.update(1)
 
     # find which model had the best accuracy
     best_accuracy = np.argmax(model_accuracy)

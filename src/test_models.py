@@ -84,9 +84,6 @@ def test_models(dataset, models, class_type):
         with open(path, "w") as text_file:
             text_file.write(report)
 
-        # print classification report
-        print(report)
-
         conf_matrix = confusion_matrix(Y_test, model_predictions[model_index])
 
         path = str(actual_dir) + '/figures/test_results/' + class_type + '_' + model_name[
