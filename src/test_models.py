@@ -96,6 +96,7 @@ def test_models(dataset, models, class_type):
         confusionmatrix_generator(conf_matrix, class_type, Y_test,
                                   path, class_type + ' ' + model_name[model_index] + ' Confusion Matrix - Test Set')
 
+    # sort the models with best accuracy
     sorted_models = np.argsort(model_accuracy)
 
     print("The accuracies from worse to best in " + class_type + " are:")

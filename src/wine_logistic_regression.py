@@ -10,7 +10,7 @@ import numpy as np
 import pickle
 import pathlib
 from confusionmatrix_generator import confusionmatrix_generator
-
+from tqdm import tqdm
 
 def wine_log_regression(X_train, Y_train, X_val, Y_val, class_type):
     """
@@ -52,22 +52,25 @@ def wine_log_regression(X_train, Y_train, X_val, Y_val, class_type):
 
     print("Training " + class_type + " Log Reg")
     # test which is the best model varying the parameters set above
-    for solver in solver_array:
-        for iteration in maximum_iterations:
-            for C in C_parameter:
-                # appending the models in the list
-                model.append(LogisticRegression(penalty='l2',
-                                                C=C,
-                                                solver=solver,
-                                                max_iter=iteration,
-                                                multi_class=multi_class))
-                # fit the data to the current model
-                model[model_index].fit(X_train, Y_train)
-                # predict the values with the validation set
-                model_predictions.append(model[model_index].predict(X_val))
-                # compute the current model's accuracy, normalized
-                model_accuracy.append(accuracy_score(Y_val, model_predictions[model_index], normalize=True))
-                model_index += 1
+    with tqdm(total=len(solver_array)) as pbar:
+        for solver in solver_array:
+            for iteration in maximum_iterations:
+                for C in C_parameter:
+                    # appending the models in the list
+                    model.append(LogisticRegression(penalty='l2',
+                                                    C=C,
+                                                    solver=solver,
+                                                    max_iter=iteration,
+                                                    multi_class=multi_class))
+                    # fit the data to the current model
+                    model[model_index].fit(X_train, Y_train)
+                    # predict the values with the validation set
+                    model_predictions.append(model[model_index].predict(X_val))
+                    # compute the current model's accuracy, normalized
+                    model_accuracy.append(accuracy_score(Y_val, model_predictions[model_index], normalize=True))
+                    model_index += 1
+            pbar.update(1)
+
 
     # find which model had the best accuracy
     best_accuracy = np.argmax(model_accuracy)

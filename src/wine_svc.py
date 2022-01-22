@@ -11,7 +11,7 @@ import numpy as np
 import pickle
 from confusionmatrix_generator import confusionmatrix_generator
 import pathlib
-
+from tqdm import tqdm
 
 def wine_svc(X_train, Y_train, X_val, Y_val, class_type):
     """
@@ -47,23 +47,26 @@ def wine_svc(X_train, Y_train, X_val, Y_val, class_type):
 
     print("Training " + class_type + " SVC")
     # creating and training the models
-    for kernel in kernel_array:
-        for degree in degree_array:
-            for C in C_parameter:
-                for gamma in gamma_array:
-                    # append all the generated models with different parameters
-                    model.append(svm.SVC(C=C,
-                                         kernel=kernel,
-                                         degree=degree,
-                                         gamma=gamma))
+    with tqdm(total=len(kernel_array)) as pbar:
+        for kernel in kernel_array:
+            for degree in degree_array:
+                for C in C_parameter:
+                    for gamma in gamma_array:
+                        # append all the generated models with different parameters
+                        model.append(svm.SVC(C=C,
+                                             kernel=kernel,
+                                             degree=degree,
+                                             gamma=gamma))
 
-                    # fit the data to each model
-                    model[model_index].fit(X_train, Y_train)
-                    # predict the values with the validation set
-                    model_predictions.append(model[model_index].predict(X_val))
-                    # compute the current model's accuracy, normalized
-                    model_accuracy.append(accuracy_score(Y_val, model_predictions[model_index], normalize=True))
-                    model_index += 1
+                        # fit the data to each model
+                        model[model_index].fit(X_train, Y_train)
+                        # predict the values with the validation set
+                        model_predictions.append(model[model_index].predict(X_val))
+                        # compute the current model's accuracy, normalized
+                        model_accuracy.append(accuracy_score(Y_val, model_predictions[model_index], normalize=True))
+                        model_index += 1
+            pbar.update(1)
+
 
     # find which model had the best accuracy
     best_accuracy = np.argmax(model_accuracy)

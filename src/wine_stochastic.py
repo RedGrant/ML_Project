@@ -11,7 +11,7 @@ import numpy as np
 import pickle
 import pathlib
 from confusionmatrix_generator import confusionmatrix_generator
-
+from tqdm import tqdm
 
 def wine_stochastic(X_train, Y_train, X_val, Y_val, class_type):
     """
@@ -57,24 +57,27 @@ def wine_stochastic(X_train, Y_train, X_val, Y_val, class_type):
 
     print("Training " + class_type + " SGD")
     # creating and training the models
-    for loss in loss_array:
-        for penalty in penalty_array:
-            for alpha in alpha_array:
-                for max_iter in max_iterations:
-                    # append all the generated models with different parameters
-                    model.append(SGDClassifier(loss=loss,
-                                               penalty=penalty,
-                                               alpha=alpha,
-                                               max_iter=max_iter,
-                                               early_stopping=early_stopping,
-                                               learning_rate=learning_rate))
-                    # fit the data to each model
-                    model[model_index].fit(X_train, Y_train)
-                    # predict the values with the validation set
-                    model_predictions.append(model[model_index].predict(X_val))
-                    # compute the current model's accuracy, normalized
-                    model_accuracy.append(accuracy_score(Y_val, model_predictions[model_index], normalize=True))
-                    model_index += 1
+    with tqdm(total=len(loss_array)) as pbar:
+        for loss in loss_array:
+            for penalty in penalty_array:
+                for alpha in alpha_array:
+                    for max_iter in max_iterations:
+                        # append all the generated models with different parameters
+                        model.append(SGDClassifier(loss=loss,
+                                                   penalty=penalty,
+                                                   alpha=alpha,
+                                                   max_iter=max_iter,
+                                                   early_stopping=early_stopping,
+                                                   learning_rate=learning_rate))
+                        # fit the data to each model
+                        model[model_index].fit(X_train, Y_train)
+                        # predict the values with the validation set
+                        model_predictions.append(model[model_index].predict(X_val))
+                        # compute the current model's accuracy, normalized
+                        model_accuracy.append(accuracy_score(Y_val, model_predictions[model_index], normalize=True))
+                        model_index += 1
+            pbar.update(1)
+
 
     # find which model had the best accuracy
     best_accuracy = np.argmax(model_accuracy)
