@@ -49,8 +49,9 @@ def dataset_loader(classifier_type):
     path = str(actual_dir) + '/figures/correlation_heatmap_wine_dataset.png'
     if not os.path.exists(path):
         correlations = raw_dataset.corr()
-        heatmap_figure = plt.subplot()
-        heatmap_figure = sb.heatmap(correlations, ax=heatmap_figure)
+        heatmap_figure, ax = plt.subplots(figsize=(15, 15))
+        sb.set(font_scale=1.4)
+        heatmap_figure = sb.heatmap(correlations, ax=ax)
         heatmap_figure.figure.savefig(path)
         plt.close('all')
         path = str(actual_dir) + '/data/correlation_pearson_wine_dataset.csv'
