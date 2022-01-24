@@ -91,7 +91,7 @@ def wine_deep(X_train, Y_train, X_val, Y_val, class_type):
 
     # Deep Model
     path = str(actual_dir) + '/figures/' + class_type + '_dl_deep_accuracy.png'
-    pyplot.plot()
+    pyplot.plot(figsize=(15, 15))
     pyplot.title('Deep Learning Deep Accuracy ' + class_type)
     pyplot.plot(deep_model_training_history.history['accuracy'], label='train')
     pyplot.plot(deep_model_training_history.history['val_accuracy'], label='val')
@@ -102,7 +102,7 @@ def wine_deep(X_train, Y_train, X_val, Y_val, class_type):
     pyplot.close('all')
 
     path = str(actual_dir) + '/figures/' + class_type + '_dl_deep_loss.png'
-    pyplot.plot()
+    pyplot.plot(figsize=(15, 15))
     pyplot.title('Deep Learning Deep Loss ' + class_type)
     pyplot.plot(deep_model_training_history.history['loss'], label='train')
     pyplot.plot(deep_model_training_history.history['val_loss'], label='val')
@@ -114,7 +114,7 @@ def wine_deep(X_train, Y_train, X_val, Y_val, class_type):
 
     # Shallow Model
     path = str(actual_dir) + '/figures/' + class_type + '_dl_shallow_accuracy.png'
-    pyplot.plot()
+    pyplot.plot(figsize=(15, 15))
     pyplot.title('Deep Learning Shallow Accuracy ' + class_type)
     pyplot.plot(shallow_model_training_history.history['accuracy'], label='train')
     pyplot.plot(shallow_model_training_history.history['val_accuracy'], label='val')
@@ -125,7 +125,7 @@ def wine_deep(X_train, Y_train, X_val, Y_val, class_type):
     pyplot.close('all')
 
     path = str(actual_dir) + '/figures/' + class_type + '_dl_shallow_loss.png'
-    pyplot.plot()
+    pyplot.plot(figsize=(15, 15))
     pyplot.title('Deep Learning Shallow Loss ' + class_type)
     pyplot.plot(shallow_model_training_history.history['loss'], label='train')
     pyplot.plot(shallow_model_training_history.history['val_loss'], label='val')

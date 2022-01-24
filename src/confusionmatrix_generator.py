@@ -41,6 +41,7 @@ def confusionmatrix_generator(conf_matrix, class_type, class_outputs, path, titl
             confusion_matrix_plot.xaxis.set_ticklabels(class_labels)
             confusion_matrix_plot.yaxis.set_ticklabels(class_labels)
 
+        plt.tight_layout()
         confusion_matrix_plot.figure.savefig(path)
         plt.close('all')
 

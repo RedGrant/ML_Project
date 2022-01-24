@@ -228,7 +228,9 @@ def class_separation(class_dataset, class_output, class_type):
     # if the figure is not saved yet, it will be generated
     if not os.path.exists(path):
         # pair plotting the data
+        plt.plot(figsize=(15, 15))
         histogram_figure = sb.countplot(x='classification', data=class_dataset)
+        plt.tight_layout()
         histogram_figure = histogram_figure.get_figure()
         histogram_figure.savefig(path)
         plt.close(histogram_figure)

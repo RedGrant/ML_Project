@@ -36,3 +36,4 @@ if len(binary_models) == 6 and len(multiclass3_models) == 6 and len(multiclass_s
     test_models(dataset_multiclass_stars, multiclass_stars_models, class_type[2])
     print("---------------- Test quality class models ----------------")
     test_models(dataset_multiclass_6, multiclass6_models, class_type[3])
+    print("")
