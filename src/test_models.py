@@ -87,7 +87,7 @@ def test_models(dataset, models, class_type):
         conf_matrix = confusion_matrix(Y_test, model_predictions[model_index])
 
         path = str(actual_dir) + '/figures/test_results/' + class_type + '_' + model_name[
-            model_index] + 'sgd_cmatrix_test.png'
+            model_index] + '_cmatrix_test.png'
 
         # generate a confusion matrix with the validation set
         confusionmatrix_generator(conf_matrix, class_type, Y_test,
