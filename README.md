@@ -5,11 +5,19 @@ The main purpose of this paper is to provide a comparison of the different model
 
 Requirements:
 Python 3.8 or above.
+
 Tensorflow 2 was used to train deep learning modules.
+
 numpy
+
 seaborn
+
 sklearn
+
 pandas
+
 pickle
+
 matplotlib
+
 tqdm
